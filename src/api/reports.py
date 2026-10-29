@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 
 from src.authentication import check_authentication
 from src.api.dependencies import SessionDep
+from src.schemas.reports import ReportCreateSchema
 
 # Для взаимодействия с каким-нибудь отчётом нужно быть залогиненым в систему.
 # Будем использовать токен авторизации, который будет передаваться в заголовке запроса.
@@ -10,7 +11,7 @@ reports_router = APIRouter(tags=["Reports"], dependencies=[Depends(check_authent
 
 # Create
 @reports_router.post("/reports")
-async def create_report(session : SessionDep):
+async def create_report(report: ReportCreateSchema, session: SessionDep):
     
     return {"message": "Create report"}
 

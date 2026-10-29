@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from src.api.users import router as users_router
+from src.api.users import users_router as users_router
 from src.api.reports import reports_router
 from src.api.dev import developer_router
 

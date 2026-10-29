@@ -91,6 +91,7 @@ class ConfirmationModel(Base):
     user: Mapped["UserModel"] = relationship(back_populates="confirmations")
     report: Mapped["ReportModel"] = relationship(back_populates="confirmations")
     workshop: Mapped["WorkshopModel"] = relationship(back_populates="confirmations")
+    attachments: Mapped[list["AttachmentModel"]] = relationship(back_populates="confirmation")
 
 
 class UserModel(Base):

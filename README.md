@@ -8,9 +8,9 @@
 - Pydantic
 - Elasticsearch
 
-## Нужно изучить
-Anotated
-Нужны ли uuid или оставить int
+## Техдолг
+- Валидация паролей методами pydantic
+
 
 ## ERD
 
