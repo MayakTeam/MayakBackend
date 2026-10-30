@@ -1,12 +1,12 @@
 from src.models import UserModel
-from src.repositories.users import UserReposoitory
+from src.repositories.users import UserRepository
 from src.schemas.users import UserCreateSchema
 from src.exceptions import UsernameTakenError
 from src.safety import hash_password
 
 
 class UserService:
-    def __init__(self, repo: UserReposoitory):
+    def __init__(self, repo: UserRepository):
         self.repo = repo
     
     async def create_user(self, data: UserCreateSchema) -> UserModel:
