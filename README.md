@@ -10,74 +10,87 @@
 
 ## Техдолг
 - Валидация паролей методами pydantic
-
+- Подключение к БД по пути, указанным в config.py
 
 ## ERD
 
 ```mermaid
 erDiagram
-    ROLES ||--o{ USERS : "назначается"
-    USERS ||--o{ REPORTS : "создаёт"
-    USERS ||--o{ CONFIRMATIONS : "подтверждает"
+    ROLES ||--o{ USERS : "назначена"
+    USERS ||--o{ REPORTS : "автор"
     USERS ||--o{ COMMENTS : "пишет"
-    WORKSHOPS ||--o{ CONFIRMATIONS : "место"
-    STATUSES ||--o{ REPORTS : "статус"
-    REPORTS ||--o{ CONFIRMATIONS : "подтверждается"
-    REPORTS ||--o{ ATTACHMENTS : "имеет"
+    USERS ||--o{ CONFIRMATIONS : "подтверждает"
+    USERS ||--o{ ATTACHMENTS : "загружает"
+    USERS }o--o| WORKSHOPS : "цех по умолчанию"
+
+    STATUSES ||--o{ REPORTS : "имеет"
     REPORTS ||--o{ COMMENTS : "содержит"
-    COMMENTS ||--o{ ATTACHMENTS : "имеет"
+    REPORTS ||--o{ CONFIRMATIONS : "подтверждается"
+    REPORTS |o--o{ ATTACHMENTS : "вложение"
+    COMMENTS |o--o{ ATTACHMENTS : "вложение"
+    CONFIRMATIONS |o--o{ ATTACHMENTS : "вложение"
+    WORKSHOPS ||--o{ CONFIRMATIONS : "целевой цех"
 
     ROLES {
-        int role_id PK
-        string name
+        int id PK
+        string name UK
+        json permissions
     }
+
     USERS {
-        int user_id PK
-        string last_name
-        string first_name
-        string login
+        int id PK
+        string username UK
+        string password_hash
         int role_id FK
+        int default_workshop_id FK "nullable"
+        datetime created_at
+        datetime last_login_at "nullable"
     }
-    WORKSHOPS {
-        int workshop_id PK
-        string name
-    }
+
     STATUSES {
-        int status_id PK
-        string code
-        string name
-        bool is_terminal
+        int id PK
+        string name UK
     }
+
+    WORKSHOPS {
+        int id PK
+        string name UK
+    }
+
     REPORTS {
-        int report_id PK
+        int id PK
         string title
-        text description
+        string description
         int author_id FK
         int status_id FK
-        datetime first_seen_at
+        datetime created_at
+        datetime last_updated_at
+    }
+
+    COMMENTS {
+        int id PK
+        int report_id FK
+        int author_id FK
+        string text
         datetime created_at
     }
+
     CONFIRMATIONS {
-        int confirmation_id PK
+        int id PK
         int report_id FK
         int user_id FK
         int workshop_id FK
-        text comment
+        string text
         datetime confirmed_at
     }
+
     ATTACHMENTS {
-        int attachment_id PK
+        int id PK
         int report_id FK "nullable"
         int comment_id FK "nullable"
+        int confirmation_id FK "nullable"
         string url
-        string file_type
-        datetime created_at
-    }
-    COMMENTS {
-        int comment_id PK
-        int report_id FK
-        int author_id FK
-        text body
+        int user_id FK
         datetime created_at
     }
 ```
